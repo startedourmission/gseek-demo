@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GSEEK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Black+Han+Sans&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+  :root {
+    --carbon: #000000;
+    --paper: #ffffff;
+    --sky: #dceeff;
+    --concrete: #cccccc;
+    --mist: #e9e9e9;
+    --blue: #4da2ff;
+    --blue-deep: #1c6fe0;
+    --blue-light: #a9d3ff;
+    --mint: #55db9c;
+    --lavender: #e9ccff;
+    --ember: #fb4903;
+    --sun: #ffd731;
+    --violet: #5c4ade;
+
+    --font-display: 'Anton', 'Black Han Sans', Impact, sans-serif;
+    --font-display-ko: 'Black Han Sans', 'Anton', sans-serif;
+    --font-ui: 'Pretendard', 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--carbon); }
+  body {
+    font-family: var(--font-ui);
+    color: var(--carbon);
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+  /* ── Marquee ─────────────────────────────── */
+  .marquee {
+    background: var(--lavender);
+    border-bottom: 1px solid var(--carbon);
+    overflow: hidden;
+    white-space: nowrap;
+    height: 38px;
+    display: flex;
+    align-items: center;
+  }
+  .marquee__track {
+    display: inline-flex;
+    gap: 26px;
+    animation: marquee 28s linear infinite;
+    padding-left: 26px;
+  }
+  .marquee__track span {
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.032em;
+    text-transform: uppercase;
+  }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+
+  /* ── Frame ───────────────────────────────── */
+  .frame { padding: 12px 14px 14px; display: grid; gap: 14px; }
+  .panel {
+    position: relative;
+    border-radius: 30px;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .panel--sky { background: var(--sky); min-height: calc(100vh - 64px); min-height: calc(100svh - 64px); }
+  .panel--gray { background: var(--concrete); }
+  .panel--white { background: var(--paper); }
+
+  .ribbon {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* ── Nav ─────────────────────────────────── */
+  .nav {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 30px 0;
+  }
+  .logo {
+    width: 56px; height: 56px;
+    border: 1.5px solid var(--carbon);
+    border-radius: 1600px;
+    background: var(--paper);
+    display: grid; place-items: center;
+    font-family: var(--font-display);
+    font-size: 28px;
+    line-height: 1;
+    padding-top: 2px;
+  }
+  .nav__links { display: flex; align-items: center; gap: 6px; }
+  .pill {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    height: 50px;
+    padding: 0 30px;
+    border: 1.5px solid var(--carbon);
+    border-radius: 1600px;
+    background: var(--paper);
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.032em;
+    white-space: nowrap;
+    transition: background .15s ease, color .15s ease;
+  }
+  .pill:hover { background: var(--carbon); color: var(--paper); }
+  .pill--icon { width: 54px; padding: 0; font-size: 30px; font-weight: 400; }
+  .pill--solid { background: var(--carbon); color: var(--paper); height: 56px; padding: 0 34px; }
+  .pill--solid:hover { background: var(--paper); color: var(--carbon); }
+
+  /* ── Hero ────────────────────────────────── */
+  .hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5vh 20px 12vh;
+  }
+  .wordmark-wrap { position: relative; }
+  .wordmark {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(120px, 25vw, 440px);
+    line-height: 0.8;
+    letter-spacing: -0.01em;
+    transform: scaleY(1.32);
+    transform-origin: center top;
+    margin-bottom: calc(clamp(120px, 25vw, 440px) * 0.36);
+    padding-top: 0.06em;
+    user-select: none;
+  }
+  .tagline {
+    position: relative;
+    font-weight: 600;
+    font-size: clamp(30px, 4.4vw, 72px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    margin-top: -0.1em;
+    text-align: center;
+  }
+  .cta-row {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 16px;
+    margin-top: clamp(28px, 4.4vw, 48px);
+  }
+  .cta-row .pill { height: 72px; padding: 0 32px; font-size: 17px; }
+  .cta-row .pill--chrome { padding-left: 10px; }
+  .chrome-ico { width: 50px; height: 50px; flex: none; }
+
+  /* ── Stickers ────────────────────────────── */
+  .sticker { position: absolute; z-index: 3; pointer-events: none; }
+  .s-rocket { width: 19%; left: -15%; top: -4%; transform: rotate(-18deg); }
+  .s-smile  { width: 16%; left: 51%;  top: 22%; transform: rotate(-8deg); }
+  .s-coin   { width: 18%; left: -12%; top: 62%; transform: rotate(8deg); }
+  .s-wallet { width: 18%; right: -13%; top: 42%; transform: rotate(-14deg); }
+
+  /* ── Section 2 ───────────────────────────── */
+  .all {
+    position: relative;
+    padding: 26vh 6vw 14vh;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    align-items: end;
+    gap: 40px;
+  }
+  .display-ko {
+    font-family: var(--font-display-ko);
+    font-size: clamp(56px, 10vw, 190px);
+    line-height: 0.95;
+    word-break: keep-all;
+    white-space: nowrap;
+    letter-spacing: -0.02em;
+    position: relative;
+  }
+  .display-ko .latin { font-family: var(--font-display); letter-spacing: -0.005em; }
+  .all__side { display: grid; gap: 28px; justify-items: start; padding-bottom: 12px; }
+  .all__side p { font-size: 24px; line-height: 1.35; font-weight: 500; max-width: 26ch; }
+  .s-check  { width: 130px; left: 5vw; top: 5vh; transform: rotate(-10deg); }
+  .s-wallet2 { width: 170px; right: 5vw; top: 5vh; transform: rotate(12deg); }
+
+  .qr-card {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    width: 340px;
+    border: 1.5px solid var(--carbon);
+    border-radius: 20px;
+    background: var(--violet);
+    overflow: hidden;
+  }
+  .qr-card__code { background: var(--paper); padding: 12px; border-right: 1.5px solid var(--carbon); }
+  .qr-card__code svg { display: block; width: 100%; height: auto; }
+  .qr-card__label {
+    display: grid; place-items: center;
+    color: var(--paper);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.032em;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  /* ── Section 3: feature cards ────────────── */
+  .features { padding: 12vh 6vw; }
+  .features h2 {
+    font-family: var(--font-display-ko);
+    font-size: clamp(48px, 8vw, 150px);
+    line-height: 0.95;
+    word-break: keep-all;
+    letter-spacing: -0.02em;
+    margin-bottom: 56px;
+  }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .card {
+    border: 1.5px solid var(--carbon);
+    border-radius: 40px;
+    padding: 32px 28px 30px;
+    min-height: 360px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .card--mint { background: var(--mint); }
+  .card--lav  { background: var(--lavender); }
+  .card--sky  { background: var(--sky); }
+  .card__tag {
+    align-self: flex-start;
+    border: 1.5px solid var(--carbon);
+    border-radius: 1600px;
+    background: var(--paper);
+    padding: 8px 14px;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.032em;
+  }
+  .card h3 { font-size: 30px; line-height: 1.15; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 12px; }
+  .card p { font-size: 16px; line-height: 1.5; font-weight: 500; }
+
+  .footer {
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+    padding: 22px 30px;
+    color: var(--paper);
+    font-size: 13px; font-weight: 600; letter-spacing: 0.032em;
+  }
+
+  /* ── Responsive ──────────────────────────── */
+  @media (max-width: 1180px) {
+    .nav__links .pill:not(.pill--solid):not(.pill--icon) { display: none; }
+  }
+  @media (max-width: 860px) {
+    .all { grid-template-columns: 1fr; }
+    .cards { grid-template-columns: 1fr; }
+    .s-check, .s-wallet2 { width: 90px; }
+  }
+  @media (max-width: 560px) {
+    .frame { padding: 8px; gap: 8px; }
+    .panel { border-radius: 22px; }
+    .nav { padding: 16px 16px 0; }
+    .logo { width: 46px; height: 46px; font-size: 22px; }
+    .pill--icon { width: 46px; height: 46px; }
+    .pill--solid { height: 46px; padding: 0 20px; font-size: 14px; }
+    .hero { padding-top: 12vh; }
+    .cta-row .pill { height: 58px; padding: 0 22px; font-size: 15px; }
+    .chrome-ico { width: 38px; height: 38px; }
+    .qr-card { width: 100%; max-width: 340px; grid-template-columns: 120px 1fr; }
+    .features, .all { padding-left: 20px; padding-right: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- shared SVG defs: grainy 3D tube shading -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="grain" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="7" result="noise" />
+      <feColorMatrix in="noise" type="matrix"
+        values="0 0 0 0 0
+                0 0 0 0 0
+                0 0 0 0 0
+                0 0 0 -4 1.9" result="speckle" />
+      <feComposite in="speckle" in2="SourceGraphic" operator="in" result="dots" />
+      <feFlood flood-color="#0a4cb0" flood-opacity="0.35" />
+      <feComposite in2="dots" operator="in" result="darkdots" />
+      <feMerge>
+        <feMergeNode in="SourceGraphic" />
+        <feMergeNode in="darkdots" />
+      </feMerge>
+    </filter>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="18" />
+    </filter>
+    <filter id="soft-sm" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="9" />
+    </filter>
+  </defs>
+</svg>
+
+<div class="marquee" aria-label="GSEEK 카드 사전 신청 오픈">
+  <div class="marquee__track">
+    <span>GSEEK 카드 사전 신청 오픈</span><span>GSEEK 카드 사전 신청 오픈</span><span>GSEEK 카드 사전 신청 오픈</span><span>GSEEK 카드 사전 신청 오픈</span><span>GSEEK 카드 사전 신청 오픈</span><span>GSEEK 카드 사전 신청 오픈</span><span>GSEEK 카드 사전 신청 오픈</span><span>GSEEK 카드 사전 신청 오픈</span><span>GSEEK 카드 사전 신청 오픈</span><span>GSEEK 카드 사전 신청 오픈</span>
+    <span>GSEEK 카드 사전 신청 오픈</span><span>GSEEK 카드 사전 신청 오픈</span><span>GSEEK 카드 사전 신청 오픈</span><span>GSEEK 카드 사전 신청 오픈</span><span>GSEEK 카드 사전 신청 오픈</span><span>GSEEK 카드 사전 신청 오픈</span><span>GSEEK 카드 사전 신청 오픈</span><span>GSEEK 카드 사전 신청 오픈</span><span>GSEEK 카드 사전 신청 오픈</span><span>GSEEK 카드 사전 신청 오픈</span>
+  </div>
+</div>
+
+<main class="frame">
+
+  <!-- ═════════ HERO ═════════ -->
+  <section class="panel panel--sky">
+    <svg class="ribbon" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g filter="url(#grain)">
+      <g id="tube" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path id="tubePath" d="M 980 -80
+                 C 820 60, 420 220, 250 360
+                 C 60 520, 120 760, 420 760
+                 C 760 760, 1000 520, 1240 470
+                 C 1480 420, 1560 640, 1450 860
+                 C 1380 1000, 1260 1080, 1180 1120" />
+      </g>
+      <use href="#tubePath" stroke="#1c6fe0" stroke-width="250" fill="none" stroke-linecap="round" transform="translate(10 16)" filter="url(#soft-sm)" opacity=".55" />
+      <use href="#tubePath" stroke="#2f86f5" stroke-width="240" fill="none" stroke-linecap="round" />
+      <use href="#tubePath" stroke="#4da2ff" stroke-width="190" fill="none" stroke-linecap="round" transform="translate(-10 -12)" filter="url(#soft)" />
+      <use href="#tubePath" stroke="#8ec5ff" stroke-width="60" fill="none" stroke-linecap="round" transform="translate(-34 -46)" filter="url(#soft)" opacity=".75" />
+      <use href="#tubePath" stroke="#4da2ff" stroke-width="240" fill="none" stroke-linecap="round" opacity=".28" />
+
+      <!-- upper-right secondary tube -->
+      <path id="tube2" d="M 1180 -60 C 1080 120, 1160 260, 1320 340 C 1480 420, 1640 380, 1700 300" fill="none" />
+      <use href="#tube2" stroke="#2f86f5" stroke-width="200" fill="none" stroke-linecap="round" />
+      <use href="#tube2" stroke="#4da2ff" stroke-width="150" fill="none" stroke-linecap="round" transform="translate(-8 -10)" filter="url(#soft)" />
+      <use href="#tube2" stroke="#8ec5ff" stroke-width="44" fill="none" stroke-linecap="round" transform="translate(-26 -36)" filter="url(#soft)" opacity=".7" />
+
+      <!-- bottom-left stub -->
+      <ellipse cx="330" cy="1040" rx="170" ry="110" fill="#2f86f5" />
+      <ellipse cx="320" cy="1030" rx="120" ry="70" fill="#4da2ff" filter="url(#soft)" />
+      </g>
+    </svg>
+
+    <nav class="nav">
+      <a class="logo" href="#" aria-label="GSEEK 홈">G</a>
+      <div class="nav__links">
+        <a class="pill" href="#">시작하기</a>
+        <a class="pill" href="#">카드</a>
+        <a class="pill" href="#">디파이</a>
+        <a class="pill" href="#">보안</a>
+        <a class="pill" href="#">가이드</a>
+        <a class="pill" href="#">다운로드</a>
+        <button class="pill pill--icon" aria-label="메뉴 더보기">+</button>
+        <a class="pill pill--solid" href="#">앱 실행</a>
+      </div>
+    </nav>
+
+    <div class="hero">
+      <div class="wordmark-wrap">
+        <h1 class="wordmark">GSEEK</h1>
+
+        <!-- rocket -->
+        <svg class="sticker s-rocket" viewBox="0 0 200 220" aria-hidden="true">
+          <g stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+            <path d="M58 118 L22 150 L40 188 L74 150 Z" fill="#fb4903" />
+            <path d="M142 118 L178 150 L160 188 L126 150 Z" fill="#fb4903" />
+            <path d="M86 168 Q100 206 114 168 Z" fill="#e9ccff" />
+            <path d="M100 12 C150 44 158 110 138 168 L62 168 C42 110 50 44 100 12 Z" fill="#fff" />
+            <path d="M100 12 C122 26 136 46 144 70 L56 70 C64 46 78 26 100 12 Z" fill="#fb4903" />
+            <circle cx="100" cy="102" r="20" fill="#4da2ff" />
+            <path d="M92 94 q6 -6 14 -2" fill="none" stroke="#fff" stroke-width="4" />
+            <path d="M84 168 L116 168 L110 180 L90 180 Z" fill="#ccc" />
+          </g>
+        </svg>
+
+        <!-- smiling coin -->
+        <svg class="sticker s-smile" viewBox="0 0 200 180" aria-hidden="true">
+          <g stroke="#000" stroke-width="5" stroke-linejoin="round">
+            <ellipse cx="104" cy="104" rx="84" ry="66" fill="#e0b400" />
+            <ellipse cx="98" cy="88" rx="84" ry="66" fill="#ffd731" />
+            <ellipse cx="80" cy="70" rx="16" ry="18" fill="#fff" />
+            <ellipse cx="112" cy="66" rx="16" ry="18" fill="#fff" />
+            <circle cx="86" cy="72" r="8" fill="#000" stroke="none" />
+            <circle cx="118" cy="68" r="8" fill="#000" stroke="none" />
+            <path d="M50 104 Q98 150 152 96" fill="none" />
+          </g>
+        </svg>
+
+        <!-- green G coin -->
+        <svg class="sticker s-coin" viewBox="0 0 200 200" aria-hidden="true">
+          <g stroke="#000" stroke-width="5" stroke-linejoin="round">
+            <ellipse cx="104" cy="112" rx="80" ry="72" fill="#2fb97a" />
+            <ellipse cx="98" cy="100" rx="80" ry="72" fill="#55db9c" />
+            <ellipse cx="98" cy="100" rx="58" ry="52" fill="#55db9c" />
+            <text x="98" y="128" text-anchor="middle" font-family="Anton, Impact, sans-serif" font-size="82" fill="#000" stroke="none">G</text>
+            <path d="M22 50 l10 6 -6 10 10 -4 4 10 2 -12 12 -2 -12 -4 2 -12 -8 8 z" fill="#fff" />
+            <path d="M170 152 l8 6 -6 8 10 -2 4 10 2 -10 10 -2 -10 -4 2 -10 -8 6 z" fill="#fff" />
+          </g>
+        </svg>
+
+        <!-- wallet -->
+        <svg class="sticker s-wallet" viewBox="0 0 220 180" aria-hidden="true">
+          <g stroke="#000" stroke-width="5" stroke-linejoin="round">
+            <path d="M44 46 L150 18 L166 58 L60 86 Z" fill="#fff" />
+            <path d="M56 54 L162 30 L172 62 L66 88 Z" fill="#55db9c" />
+            <rect x="24" y="56" width="176" height="110" rx="22" fill="#3f30b8" />
+            <rect x="18" y="48" width="176" height="110" rx="22" fill="#5c4ade" />
+            <rect x="150" y="84" width="54" height="40" rx="14" fill="#5c4ade" />
+            <circle cx="170" cy="104" r="6" fill="#000" stroke="none" />
+          </g>
+        </svg>
+      </div>
+
+      <p class="tagline">당신의 돈, 이제 막힘없이.</p>
+
+      <div class="cta-row">
+        <a class="pill" href="#">웹 앱 실행하기</a>
+        <a class="pill pill--chrome" href="#">
+          <svg class="chrome-ico" viewBox="0 0 48 48" aria-hidden="true">
+            <circle cx="24" cy="24" r="22" fill="#db4437" />
+            <path d="M24 24 L43.05 13 A22 22 0 0 1 24 46 Z" fill="#ffcd40" />
+            <path d="M24 24 L24 46 A22 22 0 0 1 4.95 13 Z" fill="#0f9d58" />
+            <path d="M24 24 L4.95 13 A22 22 0 0 1 43.05 13 Z" fill="#db4437" />
+            <circle cx="24" cy="24" r="10" fill="#fff" />
+            <circle cx="24" cy="24" r="7.6" fill="#4285f4" />
+          </svg>
+          크롬용 다운로드
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ SECTION 2 — gray band ═════════ -->
+  <section class="panel panel--gray">
+    <svg class="ribbon" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g filter="url(#grain)">
+      <path id="arc" d="M -120 360 C 200 40, 700 -40, 1000 120 C 1250 250, 1420 180, 1720 20" fill="none" />
+      <use href="#arc" stroke="#1c6fe0" stroke-width="230" fill="none" stroke-linecap="round" transform="translate(8 14)" filter="url(#soft-sm)" opacity=".5" />
+      <use href="#arc" stroke="#2f86f5" stroke-width="220" fill="none" stroke-linecap="round" />
+      <use href="#arc" stroke="#4da2ff" stroke-width="170" fill="none" stroke-linecap="round" transform="translate(-8 -10)" filter="url(#soft)" />
+      <use href="#arc" stroke="#8ec5ff" stroke-width="52" fill="none" stroke-linecap="round" transform="translate(-28 -40)" filter="url(#soft)" opacity=".7" />
+      </g>
+    </svg>
+
+    <!-- check sticker -->
+    <svg class="sticker s-check" viewBox="0 0 160 160" aria-hidden="true">
+      <g stroke="#000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+        <rect x="16" y="20" width="128" height="128" rx="30" fill="#2fb97a" />
+        <rect x="10" y="12" width="128" height="128" rx="30" fill="#55db9c" />
+        <path d="M40 78 L64 102 L110 52" fill="none" stroke-width="14" />
+      </g>
+    </svg>
+
+    <!-- wallet sticker -->
+    <svg class="sticker s-wallet2" viewBox="0 0 220 180" aria-hidden="true">
+      <g stroke="#000" stroke-width="5" stroke-linejoin="round">
+        <path d="M44 46 L150 18 L166 58 L60 86 Z" fill="#ffd731" />
+        <rect x="24" y="56" width="176" height="110" rx="16" fill="#3f30b8" />
+        <rect x="18" y="48" width="176" height="110" rx="16" fill="#5c4ade" />
+        <rect x="150" y="84" width="54" height="40" rx="14" fill="#5c4ade" />
+        <circle cx="170" cy="104" r="6" fill="#000" stroke="none" />
+      </g>
+    </svg>
+
+    <div class="all">
+      <h2 class="display-ko">모든 것을<br /><span class="latin">GSEEK</span>에서</h2>
+      <div class="all__side">
+        <p>송금, 결제, 디파이까지. 하나의 지갑에서 가볍고 빠르게 관리하세요.</p>
+        <div class="qr-card">
+          <div class="qr-card__code">
+            <svg viewBox="0 0 21 21" shape-rendering="crispEdges" aria-label="다운로드 QR 코드">
+              <rect width="21" height="21" fill="#fff" />
+              <g fill="#000">
+                <path d="M0 0h7v7H0zM1 1v5h5V1zM2 2h3v3H2z" fill-rule="evenodd" />
+                <path d="M14 0h7v7h-7zM15 1v5h5V1zM16 2h3v3h-3z" fill-rule="evenodd" />
+                <path d="M0 14h7v7H0zM1 15v5h5v-5zM2 16h3v3H2z" fill-rule="evenodd" />
+                <path d="M8 0h1v1H8zM10 0h2v1h-2zM9 1h1v2H9zM11 2h2v1h-2zM8 3h1v2H8zM10 4h3v1h-3zM12 5h1v2h-1zM8 6h1v1H8zM10 6h1v1h-1z" />
+                <path d="M0 8h2v1H0zM3 8h1v2H3zM5 8h2v1H5zM1 10h2v1H1zM4 10h3v1H4zM0 12h1v1H0zM2 12h3v1H2zM6 11h1v2H6z" />
+                <path d="M8 8h3v1H8zM12 8h1v3h-1zM9 10h2v2H9zM14 8h2v1h-2zM17 8h1v2h-1zM19 8h2v1h-2zM15 10h2v1h-2zM18 11h3v1h-3zM14 12h1v2h-1zM16 12h2v1h-2z" />
+                <path d="M8 13h2v1H8zM11 13h2v2h-2zM8 15h1v2H8zM10 16h3v1h-3zM9 18h2v1H9zM12 18h1v3h-1zM8 20h3v1H8z" />
+                <path d="M14 15h2v1h-2zM17 14h2v2h-2zM20 14h1v3h-1zM15 17h1v2h-1zM17 17h2v1h-2zM14 19h1v2h-1zM16 20h3v1h-3zM18 19h3v1h-3z" />
+              </g>
+            </svg>
+          </div>
+          <div class="qr-card__label">앱<br />다운로드</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ SECTION 3 — white band ═════════ -->
+  <section class="panel panel--white">
+    <div class="features">
+      <h2>GSEEK 하나로<br />충분해요</h2>
+      <div class="cards">
+        <article class="card card--mint">
+          <span class="card__tag">카드</span>
+          <div>
+            <h3>어디서든 쓰는<br />GSEEK 카드</h3>
+            <p>잔고 그대로 전 세계 가맹점에서 결제하세요. 환전 걱정은 이제 그만.</p>
+          </div>
+        </article>
+        <article class="card card--lav">
+          <span class="card__tag">디파이</span>
+          <div>
+            <h3>한 번의 탭으로<br />예치하고 불리기</h3>
+            <p>복잡한 절차 없이 검증된 프로토콜에 바로 연결해 수익을 만드세요.</p>
+          </div>
+        </article>
+        <article class="card card--sky">
+          <span class="card__tag">보안</span>
+          <div>
+            <h3>내 자산은<br />오직 내 손에</h3>
+            <p>셀프 커스터디 지갑으로 키는 언제나 당신이 보관합니다.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <span>© 2026 GSEEK</span>
+  <span>이용약관 · 개인정보처리방침</span>
+</footer>
+
+</body>
+</html>
