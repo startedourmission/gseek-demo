@@ -47,12 +47,39 @@ npm run dev   # http://localhost:3000
 
 ## 4. 배포 (GitHub → Vercel)
 
-1. GitHub에 새 저장소를 만들고 코드 push
-2. Vercel → Add New Project → 저장소 선택
-3. **Environment Variables**에 위 두 값을 똑같이 입력 → Deploy
-4. Supabase → Authentication → URL Configuration
-   - Site URL: `https://<내주소>.vercel.app`
-   - Redirect URLs: `https://<내주소>.vercel.app/**`, `http://localhost:3000/**`
+```bash
+# GitHub 저장소 만들고 올리기
+gh repo create gseek-demo --private --source . --push
+
+# Vercel 프로젝트 만들고 GitHub와 연결 (이후 push하면 자동 배포)
+npx vercel login
+npx vercel link --yes --project gseek-demo
+npx vercel git connect
+
+# 환경변수 등록 (production / preview / development 각각)
+npx vercel env add NEXT_PUBLIC_SUPABASE_URL production
+npx vercel env add NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY production
+
+# 첫 배포
+npx vercel deploy --prod
+```
+
+> 대시보드로 해도 됩니다: Vercel → Add New Project → 저장소 선택 → Environment Variables 입력 → Deploy
+
+### 배포 후 꼭: Supabase에 내 주소 등록
+
+인증 메일의 링크가 돌아올 주소입니다. 빠뜨리면 링크를 눌렀을 때 localhost로 가서 실패합니다.
+
+`supabase/config.toml`의 `[auth]`를 고친 뒤 `npx supabase config push`
+
+```toml
+site_url = "https://gseek-demo.vercel.app"
+additional_redirect_urls = ["https://gseek-demo.vercel.app/**", "http://localhost:3000/**"]
+```
+
+> ⚠️ `config push`는 config.toml의 값으로 원격 설정을 덮어씁니다. 실행하면 바뀌는 항목을 먼저 보여주니, **주소 외에 다른 항목이 바뀌지 않는지** 확인하고 `y`를 누르세요. (기본 config.toml은 이메일 인증이 꺼져 있습니다: `[auth.email] enable_confirmations`)
+>
+> 대시보드: Authentication → URL Configuration
 
 이후에는 GitHub에 push할 때마다 Vercel이 자동으로 다시 배포합니다.
 
