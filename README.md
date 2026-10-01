@@ -98,6 +98,7 @@ additional_redirect_urls = ["https://gseek-demo.vercel.app/**", "http://localhos
 | `Invalid API key` | 환경변수 오타 · 공백, Vercel 환경변수 변경 후 **Redeploy** 했는지 |
 | 로그인은 되는데 데이터가 비어 있음 | RLS 정책이 있는지 |
 | 인증 메일이 안 옴 | Supabase 기본 메일은 시간당 발송 제한이 있음 → 잠시 후 재시도 |
+| push했는데 Vercel 배포가 **Blocked** | 커밋 작성자 이메일이 GitHub 계정과 연결되지 않음 → `git config user.email "<GitHub에 등록된 이메일>"` 설정 후 다시 커밋 · push |
 
 ## 폴더 구조
 
