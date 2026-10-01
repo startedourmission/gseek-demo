@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { deleteQuestion } from "@/app/actions/questions";
-import { Marquee } from "@/components/Marquee";
+import { QuestionIllo, WindowIllo } from "@/components/Illustrations";
+import { DrawIn, Reveal } from "@/components/Motion";
 import { Nav } from "@/components/Nav";
 import { QuestionForm } from "@/components/QuestionForm";
-import { Ribbon } from "@/components/Ribbon";
 import { SetupNotice } from "@/components/SetupNotice";
-import { QBubble, Wallet } from "@/components/Stickers";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 
@@ -20,14 +19,14 @@ const fmt = (iso: string) =>
 export default async function MemberPage() {
   if (!isSupabaseConfigured) {
     return (
-      <main className="frame">
-        <section className="panel panel--sky">
-          <Nav current="member" />
-          <div className="section">
+      <>
+        <Nav current="member" />
+        <section className="section">
+          <div className="container">
             <SetupNotice />
           </div>
         </section>
-      </main>
+      </>
     );
   }
 
@@ -47,55 +46,58 @@ export default async function MemberPage() {
 
   return (
     <>
-      <Marquee text="회원 전용 공간" />
-      <main className="frame">
-        <section className="panel panel--gray">
-          <Ribbon variant="arc" />
-          <Nav current="member" />
-          <div className="page-head">
-            <h1 className="display-ko">
-              내 질문
-            </h1>
+      <Nav current="member" />
+      <section className="page-head">
+        <div className="container page-head__grid">
+          <Reveal>
+            <span className="eyebrow">회원 전용 공간</span>
+            <h1 className="h-xl">내 질문</h1>
             <p className="lead">{user.email} 님, 반가워요. 남긴 질문과 답변을 여기서 확인하세요.</p>
-            <QBubble className="s-a" />
-            <Wallet className="s-b" />
-          </div>
-        </section>
+          </Reveal>
+          <DrawIn className="page-head__art">
+            <WindowIllo alive />
+          </DrawIn>
+        </div>
+      </section>
 
-        <section className="panel panel--white">
-          <div className="section member">
-            <article className="card card--lav">
-              <span className="tag">새 질문</span>
-              <div>
-                <h3>무엇이 궁금한가요?</h3>
-                <p style={{ marginBottom: 20 }}>질문은 나와 운영자만 볼 수 있어요. 답변 전에는 삭제할 수 있어요.</p>
-                <QuestionForm />
+      <section className="section">
+        <div className="container member">
+          <aside className="panel">
+            <h2 className="h-md">무엇이 궁금한가요?</h2>
+            <p className="sub">질문은 나와 운영자만 볼 수 있어요. 답변 전에는 삭제할 수 있어요.</p>
+            <QuestionForm />
+          </aside>
+
+          <div className="qa-list">
+            {error && <p className="notice notice--error">질문을 불러오지 못했어요: {error.message}</p>}
+            {questions.length === 0 && !error && (
+              <div className="empty">
+                <DrawIn className="illo-wrap">
+                  <QuestionIllo />
+                </DrawIn>
+                <span className="hand">아직 남긴 질문이 없어요</span>
+                <span>왼쪽에서 첫 질문을 남겨보세요.</span>
               </div>
-            </article>
-
-            <div className="qa-list">
-              {error && <p className="notice notice--error">질문을 불러오지 못했어요: {error.message}</p>}
-              {questions.length === 0 && !error && <p className="empty">아직 남긴 질문이 없어요. 첫 질문을 남겨보세요!</p>}
-              {questions.map((q) => (
-                <article key={q.id} className="qa">
-                  <div className="qa__meta">
-                    <span className={`tag ${q.answer ? "tag--답변완료" : "tag--대기"}`}>{q.answer ? "답변 완료" : "답변 대기"}</span>
-                    <span>{fmt(q.created_at)}</span>
-                    {!q.answer && (
-                      <form action={deleteQuestion} className="qa__del">
-                        <input type="hidden" name="id" value={q.id} />
-                        <button type="submit">삭제</button>
-                      </form>
-                    )}
-                  </div>
-                  <p className="qa__q">{q.content}</p>
-                  {q.answer && <p className="qa__a">{q.answer}</p>}
-                </article>
-              ))}
-            </div>
+            )}
+            {questions.map((q) => (
+              <article key={q.id} className="qa">
+                <div className="qa__meta">
+                  <span className={`status ${q.answer ? "status--done" : "status--wait"}`}>{q.answer ? "답변 완료" : "답변 대기"}</span>
+                  <span>{fmt(q.created_at)}</span>
+                  {!q.answer && (
+                    <form action={deleteQuestion} className="qa__del">
+                      <input type="hidden" name="id" value={q.id} />
+                      <button type="submit">삭제</button>
+                    </form>
+                  )}
+                </div>
+                <p className="qa__q">{q.content}</p>
+                {q.answer && <p className="qa__a">{q.answer}</p>}
+              </article>
+            ))}
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
     </>
   );
 }

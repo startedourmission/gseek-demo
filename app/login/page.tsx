@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { AuthForm } from "@/components/AuthForm";
-import { Marquee } from "@/components/Marquee";
+import { AuthShell } from "@/components/AuthShell";
+import { KeyIllo } from "@/components/Illustrations";
 import { Nav } from "@/components/Nav";
-import { Ribbon } from "@/components/Ribbon";
 import { SetupNotice } from "@/components/SetupNotice";
-import { Lock, SmileCoin } from "@/components/Stickers";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 
 export const metadata: Metadata = { title: "로그인 · GSEEK" };
@@ -15,26 +14,16 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
 
   return (
     <>
-      <Marquee text="다시 오신 걸 환영해요" />
-      <main className="frame">
-        <section className="panel panel--sky panel--full">
-          <Ribbon variant="loop" />
-          <Nav current="login" />
-          <div className="auth">
-            <div className="auth__card">
-              <Lock className="s-a" />
-              <SmileCoin className="s-b" />
-              <h1 className="display-ko display-sm">로그인</h1>
-              <p className="sub">가입한 이메일과 비밀번호를 입력하세요.</p>
-              {isSupabaseConfigured ? (
-                <AuthForm mode="login" next={typeof next === "string" ? next : undefined} initialError={initialError} />
-              ) : (
-                <SetupNotice />
-              )}
-            </div>
-          </div>
-        </section>
-      </main>
+      <Nav current="login" />
+      <AuthShell art={<KeyIllo />} note="다시 오신 걸 환영해요">
+        <h1 className="h-lg">로그인</h1>
+        <p className="sub">가입한 이메일과 비밀번호를 입력하세요.</p>
+        {isSupabaseConfigured ? (
+          <AuthForm mode="login" next={typeof next === "string" ? next : undefined} initialError={initialError} />
+        ) : (
+          <SetupNotice />
+        )}
+      </AuthShell>
     </>
   );
 }

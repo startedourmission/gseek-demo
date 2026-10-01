@@ -19,7 +19,7 @@ export function QuestionForm() {
       </div>
       {state?.error && <p className="notice notice--error">{state.error}</p>}
       {state?.message && <p className="notice notice--ok">{state.message}</p>}
-      <button className="pill pill--solid" type="submit" disabled={pending}>
+      <button className="btn btn--primary btn--block" type="submit" disabled={pending}>
         {pending ? "등록 중…" : "질문 등록"}
       </button>
     </form>

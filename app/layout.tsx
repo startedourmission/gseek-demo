@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Anton, Black_Han_Sans } from "next/font/google";
-import { RibbonDefs } from "@/components/Ribbon";
+import { Nanum_Pen_Script, Noto_Serif_KR } from "next/font/google";
+import { InkDefs } from "@/components/Illustrations";
 import "./globals.css";
 
-const anton = Anton({ weight: "400", subsets: ["latin"], variable: "--font-anton" });
-const blackHan = Black_Han_Sans({ weight: "400", preload: false, variable: "--font-black-han" });
+const serif = Noto_Serif_KR({ weight: ["600", "700"], preload: false, variable: "--font-serif" });
+const hand = Nanum_Pen_Script({ weight: "400", preload: false, variable: "--font-hand" });
 
 export const metadata: Metadata = {
   title: "GSEEK",
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="ko" className={`${anton.variable} ${blackHan.variable}`}>
+    <html lang="ko" className={`${serif.variable} ${hand.variable}`}>
       <head>
         <link
           rel="stylesheet"
@@ -21,11 +21,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body>
-        <RibbonDefs />
+        <InkDefs />
         {children}
         <footer className="footer">
-          <span>© 2026 GSEEK</span>
-          <span>Next.js · Supabase · Vercel</span>
+          <div className="container footer__in">
+            <span>© 2026 GSEEK</span>
+            <span>Next.js · Supabase · Vercel로 만들었어요</span>
+          </div>
         </footer>
       </body>
     </html>

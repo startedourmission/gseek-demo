@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Marquee } from "@/components/Marquee";
+import { QuestionIllo } from "@/components/Illustrations";
+import { DrawIn, Reveal } from "@/components/Motion";
 import { Nav } from "@/components/Nav";
-import { Ribbon } from "@/components/Ribbon";
 import { SetupNotice } from "@/components/SetupNotice";
-import { QBubble, SmileCoin } from "@/components/Stickers";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 
@@ -32,73 +31,63 @@ export default async function FaqPage({ searchParams }: PageProps<"/faq">) {
 
   return (
     <>
-      <Marquee text="무엇이든 물어보세요" />
-      <main className="frame">
-        <section className="panel panel--lavender">
-          <Ribbon variant="corner" />
-          <Nav current="faq" />
-          <div className="page-head">
-            <h1 className="display-ko">
-              자주 묻는
-              <br />
-              질문
-            </h1>
+      <Nav current="faq" />
+      <section className="page-head">
+        <div className="container page-head__grid">
+          <Reveal>
+            <span className="eyebrow">무엇이든 물어보세요</span>
+            <h1 className="h-xl">자주 묻는 질문</h1>
             <p className="lead">강의, 로그인, 배포에 대해 가장 많이 받은 질문을 모았어요.</p>
-            <QBubble className="s-a" />
-            <SmileCoin className="s-b" />
-          </div>
-        </section>
+          </Reveal>
+          <DrawIn className="page-head__art">
+            <QuestionIllo />
+          </DrawIn>
+        </div>
+      </section>
 
-        <section className="panel panel--white">
-          <div className="section">
-            {!isSupabaseConfigured && <SetupNotice />}
-            {error && <p className="notice notice--error">FAQ를 불러오지 못했어요: {error.message}</p>}
+      <section className="section">
+        <div className="container">
+          {!isSupabaseConfigured && <SetupNotice />}
+          {error && <p className="notice notice--error">FAQ를 불러오지 못했어요: {error.message}</p>}
 
-            {categories.length > 0 && (
-              <div className="faq-filters">
-                <Link className="pill" href="/faq" aria-current={!selected ? "page" : undefined}>
-                  전체
-                </Link>
-                {categories.map((c) => (
-                  <Link
-                    key={c}
-                    className="pill"
-                    href={`/faq?category=${encodeURIComponent(c)}`}
-                    aria-current={selected === c ? "page" : undefined}
-                  >
-                    {c}
-                  </Link>
-                ))}
-              </div>
-            )}
-
-            <div className="faq-list">
-              {visible.map((f) => (
-                <details key={f.id} className="faq">
-                  <summary>
-                    <span className={`tag tag--${f.category}`}>{f.category}</span>
-                    <span className="q">{f.question}</span>
-                    <span className="plus" aria-hidden="true">
-                      +
-                    </span>
-                  </summary>
-                  <p className="a">{f.answer}</p>
-                </details>
-              ))}
-              {isSupabaseConfigured && !error && visible.length === 0 && (
-                <p className="empty">아직 등록된 질문이 없어요.</p>
-              )}
-            </div>
-
-            <div className="cta-band">
-              <p>원하는 답이 없나요? 회원이라면 1:1로 질문할 수 있어요.</p>
-              <Link className="pill" href="/member">
-                질문 남기기
+          {categories.length > 0 && (
+            <div className="filters">
+              <Link className="filter" href="/faq" aria-current={!selected ? "page" : undefined}>
+                전체
               </Link>
+              {categories.map((c) => (
+                <Link key={c} className="filter" href={`/faq?category=${encodeURIComponent(c)}`} aria-current={selected === c ? "page" : undefined}>
+                  {c}
+                </Link>
+              ))}
             </div>
+          )}
+
+          <div className="faq-list">
+            {visible.map((f) => (
+              <details key={f.id} className="faq">
+                <summary>
+                  <span className={`cat cat--${f.category}`}>{f.category}</span>
+                  <span className="q">{f.question}</span>
+                  <span className="plus" aria-hidden="true" />
+                </summary>
+                <p className="a">{f.answer}</p>
+              </details>
+            ))}
           </div>
-        </section>
-      </main>
+          {isSupabaseConfigured && !error && visible.length === 0 && <p className="empty">아직 등록된 질문이 없어요.</p>}
+
+          <Reveal className="ask-band">
+            <p>
+              <span className="hand">원하는 답이 없나요?</span>
+              회원이라면 1:1로 질문할 수 있어요.
+            </p>
+            <Link className="btn btn--ghost-light" href="/member">
+              질문 남기기
+            </Link>
+          </Reveal>
+        </div>
+      </section>
     </>
   );
 }

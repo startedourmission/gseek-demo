@@ -13,7 +13,10 @@ export function AuthForm({ mode, next, initialError }: { mode: "login" | "signup
       <div className="form">
         <p className="notice notice--ok">{state.message}</p>
         <p className="auth__alt">
-          메일이 안 보이면 스팸함을 확인해 주세요. <Link href="/login">로그인으로 이동</Link>
+          메일이 안 보이면 스팸함을 확인해 주세요.{" "}
+          <Link className="link" href="/login">
+            로그인으로 이동
+          </Link>
         </p>
       </div>
     );
@@ -40,17 +43,17 @@ export function AuthForm({ mode, next, initialError }: { mode: "login" | "signup
         />
       </div>
       {error && <p className="notice notice--error">{error}</p>}
-      <button className="pill pill--solid" type="submit" disabled={pending}>
+      <button className="btn btn--primary btn--block" type="submit" disabled={pending}>
         {pending ? "처리 중…" : mode === "login" ? "로그인" : "회원가입"}
       </button>
       <p className="auth__alt">
         {mode === "login" ? (
           <>
-            아직 회원이 아니신가요? <Link href="/signup">회원가입</Link>
+            아직 회원이 아니신가요? <Link className="link" href="/signup">회원가입</Link>
           </>
         ) : (
           <>
-            이미 가입하셨나요? <Link href="/login">로그인</Link>
+            이미 가입하셨나요? <Link className="link" href="/login">로그인</Link>
           </>
         )}
       </p>
