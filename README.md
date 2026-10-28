@@ -3,6 +3,8 @@
 강의용 예제 쇼핑몰입니다. 실제 판매하지 않습니다.
 Claude Design의 `예제 쇼핑몰 v2` 시안을 Next.js(App Router, TypeScript)로 옮기고, 상품 데이터는 Supabase에서 불러옵니다.
 
+> 따라 만들기용 프롬프트는 [PROMPT.md](PROMPT.md)에 있습니다.
+
 | 페이지 | 하는 일 |
 |---|---|
 | `/` | 세일 상품 목록 — 카테고리(`?cat=주방`), 검색, 할인율 · 가격대 필터, 정렬 |
@@ -63,4 +65,6 @@ lib/products.ts       Supabase에서 상품 불러오기
 lib/supabase.ts       Supabase 클라이언트
 lib/store.ts          장바구니 · 위시리스트(브라우저 localStorage에 저장) · 검색어
 supabase/migrations/  products 테이블 · RLS · 예시 상품
+PROMPT.md             단계별 실습 프롬프트 (복사해서 Claude Code에 붙여넣기)
+docs/prompts.md       강의용 요구사항 프롬프트 예시
 ```
